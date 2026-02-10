@@ -12,7 +12,10 @@ import java.util.Date;
 public class JwtService {
 
     @Value("${jwt.access-expiration}")
-    private long expirationTime;
+    private long accessExpiration;
+
+    @Value("${jwt.refresh-expiration}")
+    private long refreshExpiration;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -29,7 +32,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -57,7 +60,11 @@ public class JwtService {
                     .getExpiration();
             return expiration.before(new Date());
         } catch (ExpiredJwtException e) {
-            return true; // Token está expirado
+            return true;
         }
+    }
+
+    public long getRefreshExpiration() {
+        return refreshExpiration;
     }
 }

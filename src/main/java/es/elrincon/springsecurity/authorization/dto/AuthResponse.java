@@ -9,9 +9,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthResponse {
     private String token;
+    private String refreshToken;
     private String message;
 
-    public AuthResponse(String token) {
+    public AuthResponse(String token, String refreshToken) {
         this.token = token;
+        this.refreshToken = refreshToken;
+    }
+
+    public static AuthResponse message(String message) {
+        AuthResponse response = new AuthResponse();
+        response.setMessage(message);
+        return response;
     }
 }
